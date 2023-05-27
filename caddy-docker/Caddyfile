@@ -1,0 +1,24 @@
+https://DOMAIN_NAME {
+    root * /usr/share/caddy
+    file_server
+    log {
+        output file /etc/caddy/caddy.log
+    }
+    tls {
+        protocols tls1.2 tls1.3
+        ciphers TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+        curves x25519
+    }
+    @vmess_websocket {
+        path VMESS_WSPATH
+        header Connection Upgrade
+        header Upgrade websocket
+    }
+    reverse_proxy @vmess_websocket localhost:10000
+    @vless_websocket {
+        path VLESS_WSPATH
+        header Connection Upgrade
+        header Upgrade websocket
+    }
+    reverse_proxy @vless_websocket localhost:20000
+}
